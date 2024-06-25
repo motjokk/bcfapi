@@ -1,0 +1,7 @@
+python-jose
+fastapi
+uvicorn
+python-multipart
+python-dotenv
+exceptiongroups
+python-jose

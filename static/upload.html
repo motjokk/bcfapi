@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Document</title>
+</head>
+<body>
+    <h1>Upload Document</h1>
+    <form id="uploadForm">
+        <label for="fileName">File Name:</label>
+        <input type="text" id="fileName" name="fileName" required><br><br>
+        <label for="file">Select File:</label>
+        <input type="file" id="file" name="file" required><br><br>
+        <label for="metadata">Metadata (JSON format):</label><br>
+        <textarea id="metadata" name="metadata" rows="4" cols="50"></textarea><br><br>
+        <button type="submit">Upload</button>
+    </form>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const fileName = document.getElementById('fileName').value;
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+            const metadata = document.getElementById('metadata').value;
+
+            if (!file) {
+                alert("Please select a file.");
+                return;
+            }
+
+            // Initiate the upload
+            const initiateResponse = await fetch('/cde/upload-document', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    'fileName': fileName
+                })
+            });
+
+            const initiateData = await initiateResponse.json();
+            const uploadUrl = initiateData.upload_ui_url;
+            const uploadId = new URL(uploadUrl).searchParams.get('upload_session');
+
+            // Upload the file
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('metadata', metadata);
+
+            const uploadResponse = await fetch(`/cde/upload/${uploadId}`, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (uploadResponse.ok) {
+                alert("File uploaded successfully!");
+            } else {
+                alert("Failed to upload the file.");
+            }
+        });
+    </script>
+</body>
+</html>
