@@ -10,7 +10,7 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, ValidationError, validator
 import json
-from sql_mod import models
+import sql_mod.models as models
 from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -237,7 +237,7 @@ async def get_projects(request: Request,
  
   
     if not projects:
-        raise HTTPException(status_code=404, detail="Projects not found")
+        raise HTTPException(status_code=404, detail="Projects not found") 
 
 
     return list[schemas.project](projects)

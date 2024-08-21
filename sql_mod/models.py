@@ -42,6 +42,7 @@ class CDE_Projects(Base):
     address = Column(Text)
     projectNumber = Column(String(150))
     client_id = Column(Integer)
+    archive_path = Column(String(150))
   
 
 class CDE_Extensions(Base):
@@ -97,6 +98,7 @@ class Files(Base):
     uri = db.Column(db.String(150))
     user_id = db.Column(db.Integer, db.ForeignKey('cde__user.id'))
     folder_id = db.Column(db.Integer, db.ForeignKey('folders.id'))
+    upload_time = db.Column(db.String(150))
     project_id = db.Column(db.Integer, db.ForeignKey('cde__projects.id'))
 
 class Folders(Base):
@@ -111,4 +113,24 @@ class Folders(Base):
     project_id = db.Column(db.Integer, db.ForeignKey('cde__projects.id'))
     subfolders = db.Column(db.Integer, db.ForeignKey('folders.id'))
 
-    
+class IFCModels(Base):
+    __bind_key__ = 'bcf'
+    __tablename__ = 'ifcmodels'
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(150))
+    uri = db.Column(db.String(150))
+    uuid = db.Column(db.String(150))
+    user_id = db.Column(db.Integer, db.ForeignKey('cde__user.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('cde__projects.id'))
+
+class FileVersions(Base):
+    __bind_key__ = 'bcf'
+    __tablename__ = 'versions'
+    id = db.Column(db.Integer, primary_key=True)
+    version = db.Column(db.String(150))
+    upload_time = db.Column(db.String(150))
+    uri = db.Column(db.String(150))
+    file_uuid = db.Column(db.String(150))
+    uuid = db.Column(db.String(150))
+    user_id = db.Column(db.Integer, db.ForeignKey('cde__user.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('cde__projects.id'))
